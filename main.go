@@ -4,12 +4,12 @@ import (
     "flag"
     "fmt"
     "os"
-    "log"
     "path/filepath"
     "github.com/docker/go-plugins-helpers/volume"
+    "github.com/YangFanlinux/dockerCephfsVolumePlug/cephfslib"
 )
 
-var debugLog *log.Logger
+
 const cephfsID = "_cephfs"
 var (
     defaultDir  = filepath.Join(volume.DefaultDockerRootDirectory, cephfsID)
@@ -23,28 +23,14 @@ func main() {
         flag.PrintDefaults()
     }
 
-    fileName := "docker-volume-cephfs.log"
-    logFile,err  := os.OpenFile(fileName,os.O_RDWR | os.O_APPEND | os.O_CREATE, 0666)
-    defer logFile.Close()
-    if err != nil {
-        log.Fatalln("open docker-volume-cephfs.log file error !")
-        os.Exit(1)
+    if cephfslib.InitCommomLib() == false {
+         os.Exit(1)
     }
-    //debugLog = log.New(logFile,"[Debug]",log.LstdFlags|log.Llongfile)
-    debugLog = log.New(logFile,"[Debug]",log.LstdFlags)
-    if debugLog == nil {
-
-        log.Fatalln("New debugLog error!")
-        os.Exit(1)
-    }
-    debugLog.Printf("Start dockerCephfsVolumePlug...")
+    defer cephfslib.ReleaseCommonLib()
+    cephfslib.DebugLog.Printf("Start dockerCephfsVolumePlug...")
     flag.Parse()
     if len(*servers) != 0 {
         d := NewCephfsDriver(*root, *servers)
-       /* if d.MountRootForCephfs() == false {
-            debugLog.Println("Can't mount cephfs,Exit")
-            os.Exit(1)
-        }*/
         h := volume.NewHandler(d)
         fmt.Println(h.ServeUnix("root", "cephfs"))
     }else if flag.NArg() > 0 {

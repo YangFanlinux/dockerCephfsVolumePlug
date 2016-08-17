@@ -3,6 +3,7 @@ import (
     "encoding/json"
     "os"
     "fmt"
+    "github.com/YangFanlinux/dockerCephfsVolumePlug/cephfslib"
 )
 /*
 type cephConnectInfo struct{
@@ -42,10 +43,10 @@ func FlexMount(hostMountPath string,flexAttachPath string,jsonValue string) {
     monitors := m["monitors"].(string)
     pathInCeph := m["path"].(string)
     secretFile := m["secretFile"].(string)
-    debugLog.Printf(" arg1 = %s,arg2 = %s",hostMountPath,flexAttachPath)
+    cephfslib.DebugLog.Printf(" arg1 = %s,arg2 = %s",hostMountPath,flexAttachPath)
 
     if len(m["monitors"].(string)) != 0 {
-        if MountCephFs(monitors,pathInCeph,hostMountPath,secretFile) {
+        if cephfslib.MountCephFs(monitors,pathInCeph,hostMountPath,secretFile) {
             os.Stdout.WriteString("{\"status\": \"Success\"}")
             return
         }else{
@@ -59,8 +60,8 @@ func FlexMount(hostMountPath string,flexAttachPath string,jsonValue string) {
 }
 
 func FlexUnmount(hostMountPath string) {
-    if isMounted(hostMountPath) {
-        if err :=unmountVolume(hostMountPath);err != nil{
+    if cephfslib.IsMounted(hostMountPath) {
+        if err :=cephfslib.UnmountVolume(hostMountPath);err != nil{
             os.Stdout.WriteString(fmt.Sprintf("{\"status\": \"Failure\",\"message\": \"can't unmount %s.err = %s\"}",hostMountPath,err.Error()))
             return
         }
