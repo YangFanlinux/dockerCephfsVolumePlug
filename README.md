@@ -6,8 +6,7 @@ Compile:
 	2)cd ./GOPATH/src/github.com/YangFanlinux/dockerCephfsVolumePlug and "go build"
 	3)You can find the bin named dockerCephfsVolumePlug in ./GOPATH/src/github.com/YangFanlinux/dockerCephfsVolumePlug
 	For convoy
-	1)copy dockerCephfsVolumePlug/cephfs to GOPATH/src/github.com/rancher/convoy/
-	  and copy dockerCephfsVolumePlug/cephfslib to GOPATH/src/github.com/rancher/convoy/cephfs/
+	1)copy dockerCephfsVolumePlug/convoy to GOPATH/src/github.com/rancher/convoy/ and copy dockerCephfsVolumePlug/cephfslib to GOPATH/src/github.com/rancher/convoy/cephfs
 	2)"make build" in GOPATH/src/github.com/rancher/convoy/
 
 Usage:
